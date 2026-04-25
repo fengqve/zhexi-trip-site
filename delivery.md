@@ -5,84 +5,134 @@
 - **正式 HTTPS 页面**：https://fengqve.github.io/zhexi-trip-site/
 - **GitHub 仓库**：https://github.com/fengqve/zhexi-trip-site
 
-这个地址可以直接发给老人打开，不会再出现本地文件或临时隧道类安全提示。
+这个地址可以直接发给家里人打开，不会再出现本地文件或临时隧道类安全提示。
 
-## 本次已完成的硬要求
+## 本次新增完成内容
 
-### 1) 正式静态托管
-- 已发布到 **GitHub Pages**
-- 域名为 GitHub 官方 HTTPS 域名，浏览器正常显示安全锁
-- 已实测首页返回 `200 OK`
+### 1) D1-D8 每一天都单独配了真实图
+这次已经把页面改成 **逐日配图**，不再用一张图笼统代表多天。
 
-### 2) 真实地图路径
-- 页面已接入 **Leaflet + OpenStreetMap**
-- 使用 **OSRM 驾车路线服务** 动态生成整条主线
-- 地图中的每个落脚点都可点击，弹窗里可直接打开高德定位
-- 当前主线覆盖：杭州 → 开化县城 → 霞山古村 → 钱江源国家公园 → 高田坑村 → 龙游石窟 → 桐庐县城 → 深澳古村 → 芦茨村 → 石舍村
+当前逐日图片为：
+- `assets/photos/d1-kaihua-county.jpg`
+- `assets/photos/d2-kaihua-yanglin.jpg`
+- `assets/photos/d3-qianjiangyuan.jpg`
+- `assets/photos/d4-qianjiangyuan-trail.jpg`
+- `assets/photos/d5-longyou-county.jpg`
+- `assets/photos/d6-longyou-grottoes.jpg`
+- `assets/photos/d7-shenao-village.jpg`
+- `assets/photos/d8-tonglu.jpg`
 
-### 3) 真实照片替换示意图
-已替换为真实照片，并随站点一同部署：
-- `assets/photos/kaihua-yanglin.jpg`
-- `assets/photos/qianjiangyuan.jpg`
-- `assets/photos/longyou-grottoes.jpg`
-- `assets/photos/fuchun-river.jpg`
+说明：
+- D1、D2、D3、D4 已分别拆成开化到达、古村慢游、钱江源进山、长虹乡村线四种不同视觉。
+- 其中 D2、D3、D6、D7 对应性较强。
+- D4 的高田坑 / 台回山公开可稳定复用图片较少，因此使用了同属开化钱江源山野线的真实场景图，尽量贴近当天气质，并在页面与本说明里如实标注。
+- D8 采用桐庐实景图，对应返程前的石舍 / 茆坪 / 芦茨溪谷收尾段整体感觉。
+
+### 2) 每一天都补上了天气、穿戴建议、当天提醒
+页面内 D1-D8 每张卡片都新增了：
+- 当天天气概览
+- 温度区间
+- 降雨概率
+- 穿戴建议
+- 当天提醒
+
+天气口径：
+- 来源：**Open-Meteo Forecast API**
+- 查询时间：**2026-04-25**
+- 坐标口径：
+  - 开化段使用开化县城坐标
+  - 龙游段使用龙游县城 / 石窟区域坐标
+  - 桐庐段使用桐庐县城坐标
+- 页面中已经明确提示：**山里天气变化快，出发前请再看一眼最新预报**
+
+本次写入页面的天气摘要如下：
+- D1 开化：多云，9°C - 23°C，降雨概率约 19%
+- D2 开化：多云，8°C - 26°C，降雨概率约 0%
+- D3 钱江源：多云到阴，11°C - 27°C，降雨概率约 39%
+- D4 高田坑 / 台回山：小雨，17°C - 19°C，降雨概率约 79%
+- D5 龙游转场：小雨，17°C - 26°C，降雨概率约 77%
+- D6 龙游石窟：多云，14°C - 26°C，降雨概率约 23%
+- D7 桐庐古村线：多云，15°C - 29°C，降雨概率约 18%
+- D8 桐庐返杭：多云偏热，15°C - 31°C，降雨概率约 14%
+
+### 3) 开化段已经拆细
+之前“开化段”容易看成一整块，现在已经拆成：
+- **D1** 杭州 → 开化，纯到达适应
+- **D2** 霞山古村 + 马金溪，偏人文慢游
+- **D3** 钱江源 / 齐溪，偏森林溪谷
+- **D4** 高田坑 + 台回山，偏小众乡村线
+
+这样家里人打开页面时，更容易理解前四天不是一个模糊的大段，而是四天节奏明显不同。
 
 ## 页面主要改动
 
-- 重做为 **老人友好的大字版单页**
-- 保留原有中文行程逻辑，并改成更容易扫读的每日卡片
-- 增加“真实路线地图”板块，替代之前的示意路线条
-- 增加“真实照片”板块，替代原来的 SVG 占位图
-- 手机上优化了字号、留白、点按区域和信息层级
+- 保持单页大字、手机友好排版
+- 每日卡片顶部直接放当天真实图
+- 每天卡片里都加入天气、穿什么、当天提醒
+- “逐日实景”板块改成 8 张图快速总览
+- 保留真实路线地图和高德定位跳转
+- 全页继续避免使用不合适的称呼，统一用“家里人”等中性表达
 
 ## 图片来源
 
-本次使用的真实照片来源如下：
+本次新增逐日图片来源如下：
 
-1. **开化古村方向实景**
+1. **D1 开化到达日**
+   - 文件：`Kaihua Qianjiangyuan Guojia Senlin Gongyuan 2018.07.22 08-51-04.jpg`
+   - 站内文件：`assets/photos/d1-kaihua-county.jpg`
+   - 来源：Wikimedia Commons / 开化县词条主图
+
+2. **D2 霞山古村线**
    - 文件：`201901 Yanglin, Kaihua.jpg`
+   - 站内文件：`assets/photos/d2-kaihua-yanglin.jpg`
    - 来源：Wikimedia Commons
-   - 用途：代表开化古村与乡村风貌段
 
-2. **钱江源国家公园实景**
-   - 文件：`Kaihua Qianjiangyuan Guojia Senlin Gongyuan 2018.07.20 07-28-19.jpg`
+3. **D3 钱江源 / 齐溪**
+   - 文件：`Kaihua Qianjiangyuan Guojia Senlin Gongyuan 2018.07.23 08-20-56.jpg`
+   - 站内文件：`assets/photos/d3-qianjiangyuan.jpg`
+   - 来源：Wikimedia Commons / 钱江源国家公园词条主图
+
+4. **D4 高田坑 / 台回山线**
+   - 文件：`Kaihua Qianjiangyuan Guojia Senlin Gongyuan 2018.07.23 07-58-27.jpg`
+   - 站内文件：`assets/photos/d4-qianjiangyuan-trail.jpg`
    - 来源：Wikimedia Commons
-   - 用途：对应钱江源 / 齐溪段
+   - 说明：用于代表开化山野乡村线，当天主题贴近，但不是高田坑村口一一对应照片
 
-3. **龙游石窟实景**
+5. **D5 龙游转场**
+   - 文件：`20210728 龙游县城 航拍.png`
+   - 站内文件：`assets/photos/d5-longyou-county.jpg`
+   - 来源：Wikimedia Commons / 龙游县词条主图
+
+6. **D6 龙游石窟**
    - 文件：`Longyou Grottoes Banner.jpg`
+   - 站内文件：`assets/photos/d6-longyou-grottoes.jpg`
    - 来源：Wikimedia Commons
-   - 用途：对应龙游石窟段
 
-4. **富春江 / 桐庐实景**
-   - 文件：`Fuchun River.jpg`
-   - 来源：Wikimedia Commons
-   - 用途：对应桐庐、芦茨、富春江收尾段
+7. **D7 深澳古村 + 芦茨线**
+   - 文件：`Gongsi Hall in Shen'ao Village 03 2016-09.jpg`
+   - 站内文件：`assets/photos/d7-shenao-village.jpg`
+   - 来源：Wikimedia Commons / 深澳村词条主图
+
+8. **D8 桐庐返程日**
+   - 文件：`201806 Tonglu, Hangzhou.jpg`
+   - 站内文件：`assets/photos/d8-tonglu.jpg`
+   - 来源：Wikimedia Commons / 桐庐县词条主图
 
 ## 验证记录
 
 ### 本地验证
-- `python3 -m http.server 4173` 启动本地预览成功
-- 本地首页返回 `HTTP/1.0 200 OK`
-- 页面已包含真实照片引用、OSRM 路线请求、地图脚本
+- 页面 HTML 已改为逐日配图结构
+- D1-D8 新图片文件已落地到 `assets/photos/`
+- 每日卡片已包含天气、穿戴建议、提醒字段
+- 地图脚本仍保留真实点位与路线绘制逻辑
 
-### 线上验证
-- `https://fengqve.github.io/zhexi-trip-site/` 已返回 `200`
-- 线上图片 `assets/photos/qianjiangyuan.jpg` 已返回 `200`
-- 首页 HTML 已确认包含：
-  - “真实路线地图”
-  - 真实照片资源路径
-  - `router.project-osrm.org` 路线请求
-
-## 剩余限制
-
-- 开化段目前使用的是 **开化实景代表图**，不是“霞山古村”与“高田坑村”各自一张一一对应的独立照片；但已经不再是示意图，而是真实实景照片。
-- 地图坐标为人工校准后的近似落点，适合行程展示与导航跳转，不等同于景区售票口级别的精确采集。
-- 地图路线依赖公开 OSRM 服务，若外部服务暂时波动，页面会自动退回到点位连线显示，不影响阅读。
+### 上线前建议再检查一遍
+- 出发前 1 天或当天早上，再更新一次天气页面截图或预报口径
+- 若 D4、D5 实际雨势增强，可在页面口头转发时提醒“只留最顺的一段，不赶山路”
 
 ## 仓库与提交
 
-- 本目录已初始化为独立 git 仓库
-- 已提交：`feat: build elderly-friendly zhexi trip site`
+- 当前目录已是独立 git 仓库
+- 本次改动完成后将继续提交并推送到 GitHub Pages
 
 生成时间：2026-04-25

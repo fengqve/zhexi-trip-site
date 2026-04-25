@@ -3,79 +3,90 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>五一浙西行程 · 家里人也能直接打开的版本</title>
-  <meta name="description" content="杭州—开化—龙游—桐庐 8天7夜自驾行程，带真实照片、真实地图路线、大字版说明。" />
+  <title>五一浙西行程 · 适合直接发给家里人的正式版</title>
+  <meta name="description" content="杭州—开化—龙游—桐庐 8天7夜自驾行程，逐日真实照片、真实地图、天气、穿戴建议和提醒都放在一页里。" />
   <link rel="preconnect" href="https://unpkg.com" />
   <link rel="preconnect" href="https://tile.openstreetmap.org" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <style>
     :root{
-      --bg:#f6f3ee;--card:#fff;--text:#20302a;--muted:#55635c;--line:#dde3dc;
-      --green:#3f6f37;--green2:#295228;--blue:#2a6c97;--gold:#ca8a13;--soft:#eef5ee;
-      --shadow:0 8px 24px rgba(20,40,30,.08);--radius:18px;
+      --bg:#f5f2eb;--card:#fff;--text:#20302a;--muted:#58665f;--line:#dde4dc;
+      --green:#3f6f37;--green2:#274c2b;--blue:#2b6c97;--gold:#ca8a13;--soft:#eef5ee;
+      --warm:#fff7ea;--shadow:0 10px 28px rgba(24,42,34,.08);--radius:18px;
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.8}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.75}
     a{color:var(--blue);text-decoration:none}
-    img{max-width:100%;display:block}
-    .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
-    .hero{padding:52px 0 34px;background:linear-gradient(135deg,#254126 0%,#3f6f37 42%,#2a6c97 100%);color:#fff}
-    .hero h1{margin:0 0 10px;font-size:clamp(34px,7vw,60px);line-height:1.1}
-    .hero p{margin:0;max-width:760px;font-size:18px;opacity:.95}
-    .badge{display:inline-block;margin-bottom:14px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);font-size:14px}
+    img{display:block;max-width:100%}
+    .wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+    .hero{padding:52px 0 34px;background:linear-gradient(135deg,#254126 0%,#3f6f37 40%,#2a6c97 100%);color:#fff}
+    .badge{display:inline-block;margin-bottom:14px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);font-size:14px}
+    .hero h1{margin:0 0 10px;font-size:clamp(34px,7vw,60px);line-height:1.08}
+    .hero p{margin:0;max-width:780px;font-size:18px;opacity:.96}
     .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:22px}
     .stat{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:14px 12px;text-align:center}
-    .stat strong{display:block;font-size:28px;line-height:1.1;margin-bottom:4px}
-    .nav{position:sticky;top:0;z-index:100;background:rgba(246,243,238,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+    .stat strong{display:block;font-size:28px;line-height:1.08;margin-bottom:4px}
+    .nav{position:sticky;top:0;z-index:100;background:rgba(245,242,235,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
     .navin{display:flex;gap:10px;overflow:auto;padding:10px 18px;white-space:nowrap}
     .nav a{padding:10px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--text);font-size:15px}
     section{padding:26px 0}
-    h2{font-size:28px;line-height:1.3;margin:0 0 8px;color:var(--green2)}
+    h2{margin:0 0 8px;font-size:28px;line-height:1.28;color:var(--green2)}
     .lead{margin:0 0 18px;color:var(--muted);font-size:16px}
-    .grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
     .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+    .grid2{display:grid;grid-template-columns:1.02fr .98fr;gap:18px}
     .route-list{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
     .route-stop{background:var(--soft);border-radius:14px;padding:12px;text-align:center}
     .route-stop strong{display:block;font-size:16px}
     .route-stop span{font-size:14px;color:var(--muted)}
+    .mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+    .mini .item{background:#f8faf7;border:1px solid var(--line);border-radius:14px;padding:12px}
+    .mini strong{display:block;font-size:16px;margin-bottom:4px}
+    .mini span{font-size:14px;color:var(--muted)}
     #map{height:520px;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#e8efe9}
     .map-note{margin-top:10px;font-size:14px;color:var(--muted)}
-    .gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-    .photo{overflow:hidden;padding:0}
-    .photo img{height:240px;width:100%;object-fit:cover}
-    .photo .txt{padding:14px 16px}
-    .photo h3{margin:0 0 6px;font-size:20px}
-    .photo p,.source{margin:0;font-size:15px;color:var(--muted)}
-    .source{margin-top:8px}
-    .days{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .photo-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+    .photo-card{padding:0;overflow:hidden}
+    .photo-card img{width:100%;height:180px;object-fit:cover}
+    .photo-card .txt{padding:12px 14px 14px}
+    .photo-card h3{margin:0 0 4px;font-size:18px}
+    .photo-card p{margin:0;color:var(--muted);font-size:14px}
+    .days{display:grid;grid-template-columns:1fr 1fr;gap:18px}
     .day{padding:0;overflow:hidden}
-    .day-head{padding:16px 18px;background:linear-gradient(90deg,#eef5ee,#f7fbff);border-bottom:1px solid var(--line)}
-    .day-head h3{margin:0 0 4px;font-size:22px}
-    .day-head p{margin:0;color:var(--muted);font-size:15px}
-    .day-body{padding:16px 18px}
-    .point{padding:10px 0;border-bottom:1px dashed #e5e9e4}
+    .day img{width:100%;height:240px;object-fit:cover;background:#edf3ee}
+    .day-body{padding:16px 18px 18px}
+    .day-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
+    .day-head h3{margin:0;font-size:22px;line-height:1.3}
+    .day-head p{margin:4px 0 0;color:var(--muted);font-size:15px}
+    .tag{flex:0 0 auto;padding:8px 12px;border-radius:999px;background:var(--warm);border:1px solid #f0dfba;font-size:13px;color:#845f10}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+    .chip{padding:7px 10px;border-radius:999px;background:#f6f8f6;border:1px solid var(--line);font-size:14px}
+    .point{padding:10px 0;border-bottom:1px dashed #e4e9e3}
     .point:last-child{border-bottom:none}
-    .point strong{display:block;font-size:17px}
+    .point strong{display:block;font-size:16px;margin-bottom:3px}
     .point span{display:block;font-size:15px;color:var(--muted)}
     .tips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
     .tip h3{margin:0 0 8px;font-size:20px}
     ul.clean{margin:8px 0 0 18px;padding:0}
     ul.clean li{margin:6px 0;font-size:15px}
-    footer{padding:28px 0 44px;color:var(--muted);font-size:14px;text-align:center}
     .small{font-size:14px;color:var(--muted)}
-    @media (max-width:860px){
-      .grid2,.days,.tips,.gallery{grid-template-columns:1fr}
+    footer{padding:30px 0 46px;color:var(--muted);font-size:14px;text-align:center}
+    @media (max-width:900px){
+      .grid2,.days,.tips,.photo-grid{grid-template-columns:1fr}
       .route-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .mini{grid-template-columns:1fr}
       #map{height:420px}
     }
     @media (max-width:520px){
       .hero{padding:36px 0 24px}
-      .hero p,.lead,.photo p,.source,.point span,.small,.day-head p,.nav a{font-size:16px}
       .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
       .card{padding:16px}
-      .route-stop strong{font-size:17px}
-      .photo img{height:220px}
+      .day{border-radius:16px}
+      .day-body{padding:14px 16px 16px}
+      .hero p,.lead,.point span,.photo-card p,.small,.nav a,.day-head p{font-size:16px}
+      .day-head{display:block}
+      .tag{display:inline-block;margin-top:8px}
+      .photo-card img,.day img{height:220px}
       #map{height:360px}
       h2{font-size:26px}
       .day-head h3{font-size:21px}
@@ -85,13 +96,13 @@
 <body>
   <header class="hero">
     <div class="wrap">
-      <div class="badge">2026 五一假期 · 大字清爽版</div>
+      <div class="badge">2026 五一假期 · 逐日清楚版</div>
       <h1>五一浙西行程</h1>
-      <p>杭州出发，先住开化，再转龙游和桐庐。这个版本可以直接发给家里人打开，页面是正式 HTTPS 静态网页，带真实照片、真实地图路线、每天做什么一眼就能看明白。</p>
+      <p>杭州出发，先住开化，再转龙游和桐庐。这个版本适合直接发给家里人打开，每一天都放了对应实景图，也把天气、穿什么、当天提醒一起写进去了。</p>
       <div class="stats">
         <div class="stat"><strong>8</strong><span>天</span></div>
         <div class="stat"><strong>7</strong><span>晚</span></div>
-        <div class="stat"><strong>10</strong><span>个主停靠点</span></div>
+        <div class="stat"><strong>D1-D4</strong><span>开化拆细看</span></div>
         <div class="stat"><strong>自驾</strong><span>主线已画在地图上</span></div>
       </div>
     </div>
@@ -101,10 +112,10 @@
     <div class="wrap navin">
       <a href="#overview">总览</a>
       <a href="#mapsec">真实路线地图</a>
-      <a href="#photos">真实照片</a>
+      <a href="#photos">逐日实景</a>
       <a href="#days">每日安排</a>
       <a href="#stay">住宿</a>
-      <a href="#tips">提醒</a>
+      <a href="#tips">临场提醒</a>
     </div>
   </nav>
 
@@ -112,23 +123,28 @@
     <div class="wrap grid2">
       <div class="card">
         <h2>路线总览</h2>
-        <p class="lead">整体节奏是“开化深度游 4 天，龙游中转 1 天，桐庐富春江线 3 天”。前半段看古村和山水，后半段放慢节奏看石窟、古村和溪谷。</p>
+        <p class="lead">这次不再把开化前半段混成一大块，而是拆成“到达适应、古村慢游、钱江源进山、长虹乡村线”四天，后面再接龙游和桐庐收尾。</p>
         <div class="route-list">
-          <div class="route-stop"><strong>杭州</strong><span>出发</span></div>
-          <div class="route-stop"><strong>开化</strong><span>D1-D4 基地</span></div>
-          <div class="route-stop"><strong>龙游</strong><span>D5 中转</span></div>
-          <div class="route-stop"><strong>桐庐</strong><span>D6-D7 基地</span></div>
-          <div class="route-stop"><strong>杭州</strong><span>D8 返回</span></div>
+          <div class="route-stop"><strong>杭州</strong><span>出发 / 返回</span></div>
+          <div class="route-stop"><strong>开化县城</strong><span>D1 落脚</span></div>
+          <div class="route-stop"><strong>霞山古村</strong><span>D2 慢游</span></div>
+          <div class="route-stop"><strong>钱江源</strong><span>D3 进山</span></div>
+          <div class="route-stop"><strong>高田坑</strong><span>D4 乡村线</span></div>
+        </div>
+        <div class="mini">
+          <div class="item"><strong>最轻松</strong><span>D1 到达日，早点入住，先把节奏放慢。</span></div>
+          <div class="item"><strong>最看天气</strong><span>D3、D4 更吃山里路况，雨天别赶夜路。</span></div>
+          <div class="item"><strong>最适合雨天</strong><span>D5-D6 的龙游转场和石窟段更稳。</span></div>
         </div>
       </div>
       <div class="card">
-        <h2>一眼能看明白的要点</h2>
+        <h2>这页怎么用最省心</h2>
         <ul class="clean">
-          <li>地图里每个点都能点开，看名字和当天安排。</li>
-          <li>蓝线不是示意线，而是按真实道路服务拉出的驾车路线。</li>
-          <li>照片已经换成真实实景，不再是示意插画。</li>
-          <li>字做大了，手机上不用放大也能看。</li>
-          <li>如果下雨，优先把龙游石窟、古村慢逛放到前面。</li>
+          <li>先看每日卡片，哪天开得轻松、哪天要早出发，一眼就能分清。</li>
+          <li>每张卡片都带了实景图，方便家里人先建立印象。</li>
+          <li>天气、穿戴建议和提醒已经写到每天下面，不用来回翻。</li>
+          <li>如果实际下雨，比起硬赶点，更建议优先保留石窟、古村和县城慢逛。</li>
+          <li>所有天气都是 2026 年 4 月 25 日查询的公开预报，出发前再看一眼最新变化就行。</li>
         </ul>
       </div>
     </div>
@@ -138,50 +154,26 @@
     <div class="wrap">
       <div class="card">
         <h2>真实路线地图</h2>
-        <p class="lead">下面这张地图会把整趟自驾主线和主要落脚点连起来。点任意圆点，可以看当天看什么、住哪里，还能直接跳到高德地图导航。</p>
+        <p class="lead">下面这张图会把整趟自驾主线和主要落脚点连起来。点任意圆点，可以看当天重点和对应停靠点，还能跳到高德定位。</p>
         <div id="map"></div>
-        <p class="map-note">说明：路线由公开 OSRM 驾车路线服务动态生成，底图来自 OpenStreetMap。首次打开可能需要 1 到 2 秒加载。</p>
+        <p class="map-note">说明：路线由公开 OSRM 驾车服务动态生成，底图来自 OpenStreetMap。若外部路线服务临时波动，页面会自动退回到点位连线显示。</p>
       </div>
     </div>
   </section>
 
   <section id="photos">
     <div class="wrap">
-      <h2>真实照片</h2>
-      <p class="lead">这里放的是实景照片，不再是示意图。为了稳定打开，照片已随站点一起部署。</p>
-      <div class="gallery">
-        <article class="card photo">
-          <img src="assets/photos/kaihua-yanglin.jpg" alt="开化杨林一带实景照片" />
-          <div class="txt">
-            <h3>开化古村方向实景</h3>
-            <p>对应 D1-D4 的开化段，先看浙西乡村的整体气质，和霞山古村、高田坑这条线的感觉接近。</p>
-            <p class="source">来源：Wikimedia Commons, 201901 Yanglin, Kaihua.jpg</p>
-          </div>
-        </article>
-        <article class="card photo">
-          <img src="assets/photos/qianjiangyuan.jpg" alt="钱江源国家森林公园实景照片" />
-          <div class="txt">
-            <h3>钱江源国家公园实景</h3>
-            <p>对应 D3 的钱江源 / 齐溪一线，是这趟最像“真正进山”的一天。</p>
-            <p class="source">来源：Wikimedia Commons, Kaihua Qianjiangyuan Guojia Senlin Gongyuan 2018.07.20 07-28-19.jpg</p>
-          </div>
-        </article>
-        <article class="card photo">
-          <img src="assets/photos/longyou-grottoes.jpg" alt="龙游石窟实景照片" />
-          <div class="txt">
-            <h3>龙游石窟实景</h3>
-            <p>对应 D5 的龙游中转日，适合雨天，也适合体力想省一点的时候看。</p>
-            <p class="source">来源：Wikimedia Commons, Longyou Grottoes Banner.jpg</p>
-          </div>
-        </article>
-        <article class="card photo">
-          <img src="assets/photos/fuchun-river.jpg" alt="富春江桐庐段实景照片" />
-          <div class="txt">
-            <h3>富春江 / 桐庐实景</h3>
-            <p>对应 D6-D8 的桐庐收尾段，深澳、环溪、芦茨和石舍都在这一片慢慢玩。</p>
-            <p class="source">来源：Wikimedia Commons, Fuchun River.jpg</p>
-          </div>
-        </article>
+      <h2>逐日实景</h2>
+      <p class="lead">每一天都单独配了一张真实照片，尽量贴近当天主题。个别较小众村落若没有现成稳定可用图，就选同一线上的真实场景代替，并在交付说明里写明。</p>
+      <div class="photo-grid">
+        <article class="card photo-card"><img src="assets/photos/d1-kaihua-county.jpg" alt="开化县到达日实景" /><div class="txt"><h3>D1 到开化</h3><p>先感受开化整体山水气质。</p></div></article>
+        <article class="card photo-card"><img src="assets/photos/d2-kaihua-yanglin.jpg" alt="开化古村方向实景" /><div class="txt"><h3>D2 霞山古村线</h3><p>更贴近古村和乡村慢游的感觉。</p></div></article>
+        <article class="card photo-card"><img src="assets/photos/d3-qianjiangyuan.jpg" alt="钱江源国家公园实景" /><div class="txt"><h3>D3 钱江源</h3><p>这天主角就是森林、溪谷和山里空气。</p></div></article>
+        <article class="card photo-card"><img src="assets/photos/d4-qianjiangyuan-trail.jpg" alt="开化山野步道实景" /><div class="txt"><h3>D4 高田坑台回山线</h3><p>强调长虹乡一带更山野、更小众的路感。</p></div></article>
+        <article class="card photo-card"><img src="assets/photos/d5-longyou-county.jpg" alt="龙游县城航拍实景" /><div class="txt"><h3>D5 龙游转场</h3><p>用龙游县城实景对应转场和入住。</p></div></article>
+        <article class="card photo-card"><img src="assets/photos/d6-longyou-grottoes.jpg" alt="龙游石窟实景" /><div class="txt"><h3>D6 龙游石窟</h3><p>这天重点很明确，就是石窟。</p></div></article>
+        <article class="card photo-card"><img src="assets/photos/d7-shenao-village.jpg" alt="深澳古村实景" /><div class="txt"><h3>D7 深澳芦茨</h3><p>富春江慢下来的一天，从古村进到溪边。</p></div></article>
+        <article class="card photo-card"><img src="assets/photos/d8-tonglu.jpg" alt="桐庐实景" /><div class="txt"><h3>D8 桐庐返杭</h3><p>返程前再留一点富春江边的舒服感。</p></div></article>
       </div>
     </div>
   </section>
@@ -189,73 +181,97 @@
   <section id="days">
     <div class="wrap">
       <h2>每天怎么走</h2>
-      <p class="lead">下面把原来的中文行程保留下来，改成更容易扫读的卡片。</p>
+      <p class="lead">每张卡片都把当天主线、天气、穿戴建议和提醒写在一起，手机上往下滑着看就行。</p>
       <div class="days">
         <article class="card day">
-          <div class="day-head"><h3>D1 · 4月30日 杭州 → 开化</h3><p>到达日，节奏最轻，早点入住休息。</p></div>
+          <img src="assets/photos/d1-kaihua-county.jpg" alt="D1 开化到达日实景" />
           <div class="day-body">
-            <div class="point"><strong>主线</strong><span>杭州出发，约 3.5 小时到开化，入住县城或马金溪附近。</span></div>
-            <div class="point"><strong>适合安排</strong><span>酒店休息、县城吃饭、顺路熟悉第二天出发方向。</span></div>
-            <div class="point"><strong>住宿</strong><span>开化县城住 1 晚。</span></div>
+            <div class="day-head"><div><h3>D1 · 4月30日 杭州 → 开化</h3><p>到达适应日，不赶景点，先把住宿和吃饭安排顺。</p></div><div class="tag">开化落脚</div></div>
+            <div class="chips"><span class="chip">天气：多云</span><span class="chip">9°C - 23°C</span><span class="chip">降雨概率约 19%</span></div>
+            <div class="point"><strong>主线</strong><span>杭州出发，车程约 3.5 小时，建议下午前后到开化县城或马金溪一带入住。</span></div>
+            <div class="point"><strong>穿什么</strong><span>早晚偏凉，短袖加薄外套最稳，车里放一件轻冲锋衣。</span></div>
+            <div class="point"><strong>当天提醒</strong><span>第一天不要再硬塞古村，重点是早点入住、吃顿顺口的晚饭，顺手买好第二天路上的水和零食。</span></div>
           </div>
         </article>
+
         <article class="card day">
-          <div class="day-head"><h3>D2 · 5月1日 霞山古村 + 马金溪</h3><p>人文慢游日，节奏温和，接受度最高。</p></div>
+          <img src="assets/photos/d2-kaihua-yanglin.jpg" alt="D2 霞山古村方向实景" />
           <div class="day-body">
-            <div class="point"><strong>主线</strong><span>上午看霞山古村，下午在马金溪周边慢逛。</span></div>
-            <div class="point"><strong>备选</strong><span>如果人多，就把节奏改成古村拍照 + 县城喝茶，不硬赶点。</span></div>
-            <div class="point"><strong>强度</strong><span>中等偏轻，适合假期第一整天。</span></div>
+            <div class="day-head"><div><h3>D2 · 5月1日 霞山古村 + 马金溪</h3><p>开化段第一整天，重点放在人文和慢逛，不追求走很多。</p></div><div class="tag">古村慢游</div></div>
+            <div class="chips"><span class="chip">天气：多云</span><span class="chip">8°C - 26°C</span><span class="chip">降雨概率约 0%</span></div>
+            <div class="point"><strong>主线</strong><span>上午去霞山古村，下午回到马金溪周边慢慢走，拍照、喝茶、找地方坐坐都合适。</span></div>
+            <div class="point"><strong>穿什么</strong><span>白天可以短袖，早晚加薄开衫；村里石板路多，穿软底防滑鞋更舒服。</span></div>
+            <div class="point"><strong>当天提醒</strong><span>五一第一天人会多，越早到越舒服。人一多就把“深逛”改成“挑重点看”，别在村口停车和排队上耗太久。</span></div>
           </div>
         </article>
+
         <article class="card day">
-          <div class="day-head"><h3>D3 · 5月2日 钱江源 / 齐溪</h3><p>整趟最像进山的一天。</p></div>
+          <img src="assets/photos/d3-qianjiangyuan.jpg" alt="D3 钱江源国家公园实景" />
           <div class="day-body">
-            <div class="point"><strong>主线</strong><span>去钱江源国家公园和齐溪一线看森林、溪谷和源头景观。</span></div>
-            <div class="point"><strong>雨天替代</strong><span>如果下雨，就压缩山里段，提前回县城或把龙游石窟提到前面。</span></div>
-            <div class="point"><strong>强度</strong><span>中等偏高，要穿防滑鞋和薄外套。</span></div>
+            <div class="day-head"><div><h3>D3 · 5月2日 钱江源 / 齐溪</h3><p>这是开化段最像真正进山的一天，景色最好，也最看天气。</p></div><div class="tag">森林溪谷</div></div>
+            <div class="chips"><span class="chip">天气：多云到阴</span><span class="chip">11°C - 27°C</span><span class="chip">降雨概率约 39%</span></div>
+            <div class="point"><strong>主线</strong><span>去钱江源国家公园和齐溪方向，看森林、溪谷和源头景观，午后别拖得太晚。</span></div>
+            <div class="point"><strong>穿什么</strong><span>短袖打底加轻薄外套，鞋子一定要防滑，包里放一件一次性雨披最保险。</span></div>
+            <div class="point"><strong>当天提醒</strong><span>山里手机信号和临时停车不一定都顺，尽量早出发。若中午后云压得低，就缩短步道，早点回县城休息。</span></div>
           </div>
         </article>
+
         <article class="card day">
-          <div class="day-head"><h3>D4 · 5月3日 高田坑 + 台回山</h3><p>最小众、也最出片的一天。</p></div>
+          <img src="assets/photos/d4-qianjiangyuan-trail.jpg" alt="D4 开化高田坑台回山方向实景" />
           <div class="day-body">
-            <div class="point"><strong>主线</strong><span>看高田坑古村、台回山和周边村道风景。</span></div>
-            <div class="point"><strong>提醒</strong><span>如果前几天下过雨，尽量白天走，不要安排夜路。</span></div>
-            <div class="point"><strong>强度</strong><span>偏高，但照片通常最好看。</span></div>
+            <div class="day-head"><div><h3>D4 · 5月3日 高田坑 + 台回山</h3><p>和前两天明显不同，这天看的是更小众、更山野的长虹乡村线。</p></div><div class="tag">长虹乡村线</div></div>
+            <div class="chips"><span class="chip">天气：小雨</span><span class="chip">17°C - 19°C</span><span class="chip">降雨概率约 79%</span></div>
+            <div class="point"><strong>主线</strong><span>上午看高田坑古村，天气允许再去台回山看村落和山间视野；若雨势明显，就只保留村里慢逛。</span></div>
+            <div class="point"><strong>穿什么</strong><span>长裤、薄防水外套、防滑鞋优先，最好备一把直柄伞，上下车更方便。</span></div>
+            <div class="point"><strong>当天提醒</strong><span>这天不建议赶夜路。雨后村道湿滑，拍照可以，别贪远。只留最顺的一段，体感会比硬跑完舒服很多。</span></div>
           </div>
         </article>
+
         <article class="card day">
-          <div class="day-head"><h3>D5 · 5月4日 开化 → 衢州 → 龙游</h3><p>转场日，不要贪多。</p></div>
+          <img src="assets/photos/d5-longyou-county.jpg" alt="D5 龙游转场日实景" />
           <div class="day-body">
-            <div class="point"><strong>主线</strong><span>从开化离开，经衢州方向转到龙游。</span></div>
-            <div class="point"><strong>怎么安排最稳</strong><span>路上以休息、吃饭、办理入住为主，给后面两天留体力。</span></div>
-            <div class="point"><strong>住宿</strong><span>龙游住 1 晚。</span></div>
+            <div class="day-head"><div><h3>D5 · 5月4日 开化 → 衢州 → 龙游</h3><p>这是纯转场和休整日，最好别加太多临时景点。</p></div><div class="tag">转场休整</div></div>
+            <div class="chips"><span class="chip">天气：小雨</span><span class="chip">17°C - 26°C</span><span class="chip">降雨概率约 77%</span></div>
+            <div class="point"><strong>主线</strong><span>从开化离开，经衢州方向转去龙游，重点放在路上休息、吃饭和办理入住。</span></div>
+            <div class="point"><strong>穿什么</strong><span>车上穿轻便衣服就行，随手带一件薄外套，进服务区和下雨时不容易着凉。</span></div>
+            <div class="point"><strong>当天提醒</strong><span>如果上午雨势大，就更不要临时绕景点。把这天当成恢复体力的一天，后面石窟和桐庐段会更从容。</span></div>
           </div>
         </article>
+
         <article class="card day">
-          <div class="day-head"><h3>D6 · 5月5日 龙游石窟 → 桐庐</h3><p>先看石窟，再去桐庐。</p></div>
+          <img src="assets/photos/d6-longyou-grottoes.jpg" alt="D6 龙游石窟实景" />
           <div class="day-body">
-            <div class="point"><strong>主线</strong><span>上午龙游石窟，下午出发去桐庐。</span></div>
-            <div class="point"><strong>提醒</strong><span>石窟里偏凉，带件外套。1.5 到 2 小时基本够看。</span></div>
-            <div class="point"><strong>住宿</strong><span>桐庐县城或富春江边住 1 晚。</span></div>
+            <div class="day-head"><div><h3>D6 · 5月5日 龙游石窟 → 桐庐</h3><p>上午看石窟，下午往桐庐走，是很稳的一天。</p></div><div class="tag">石窟最稳</div></div>
+            <div class="chips"><span class="chip">天气：多云</span><span class="chip">14°C - 26°C</span><span class="chip">降雨概率约 23%</span></div>
+            <div class="point"><strong>主线</strong><span>上午安排龙游石窟，1.5 到 2 小时基本够看，下午再开去桐庐入住。</span></div>
+            <div class="point"><strong>穿什么</strong><span>外面可穿短袖，进石窟前加一件薄外套，洞内体感会明显偏凉。</span></div>
+            <div class="point"><strong>当天提醒</strong><span>石窟里地面略潮，鞋底别太滑。看完就走，不建议把午后再塞进别的重体力安排。</span></div>
           </div>
         </article>
+
         <article class="card day">
-          <div class="day-head"><h3>D7 · 5月6日 深澳 · 荻浦 · 环溪 · 芦茨</h3><p>开始进入富春江慢生活段。</p></div>
+          <img src="assets/photos/d7-shenao-village.jpg" alt="D7 深澳古村实景" />
           <div class="day-body">
-            <div class="point"><strong>主线</strong><span>挑 2 到 3 个古村看，不要四个都深逛，最后到芦茨休息。</span></div>
-            <div class="point"><strong>适合慢慢走</strong><span>这天可以慢慢走、多坐坐，喝茶看水，不拼步数。</span></div>
-            <div class="point"><strong>住宿</strong><span>芦茨住 1 晚最舒服。</span></div>
+            <div class="day-head"><div><h3>D7 · 5月6日 深澳 · 荻浦 · 环溪 · 芦茨</h3><p>开始进入富春江慢生活段，重点是放慢，不是全打卡。</p></div><div class="tag">古村 + 溪边</div></div>
+            <div class="chips"><span class="chip">天气：多云</span><span class="chip">15°C - 29°C</span><span class="chip">降雨概率约 18%</span></div>
+            <div class="point"><strong>主线</strong><span>古村里挑 2 到 3 个代表点看，最后到芦茨休息，傍晚在溪边坐坐最舒服。</span></div>
+            <div class="point"><strong>穿什么</strong><span>白天会热，短袖加防晒帽最合适，随手带一件空调房用的薄外套。</span></div>
+            <div class="point"><strong>当天提醒</strong><span>别把四个点都深逛。建议“深澳为主，其他点看状态再加”，这样到芦茨时人不会太累。</span></div>
           </div>
         </article>
+
         <article class="card day">
-          <div class="day-head"><h3>D8 · 5月7日 石舍 · 茆坪 · 芦茨溪谷 → 杭州</h3><p>收尾返程日，玩到舒服就回。</p></div>
+          <img src="assets/photos/d8-tonglu.jpg" alt="D8 桐庐返程日实景" />
           <div class="day-body">
-            <div class="point"><strong>主线</strong><span>上午看石舍或茆坪，下午沿芦茨溪谷收尾后回杭州。</span></div>
-            <div class="point"><strong>提醒</strong><span>最后一天不建议塞太满，保证回程轻松。</span></div>
-            <div class="point"><strong>返程</strong><span>傍晚前回到杭州最好。</span></div>
+            <div class="day-head"><div><h3>D8 · 5月7日 石舍 · 茆坪 · 芦茨溪谷 → 杭州</h3><p>收尾返程日，上午再留一点富春江边的松弛感，下午轻松回杭。</p></div><div class="tag">舒服收尾</div></div>
+            <div class="chips"><span class="chip">天气：多云偏热</span><span class="chip">15°C - 31°C</span><span class="chip">降雨概率约 14%</span></div>
+            <div class="point"><strong>主线</strong><span>上午看石舍或茆坪，再沿芦茨溪谷收尾，午后返程回杭州。</span></div>
+            <div class="point"><strong>穿什么</strong><span>短袖为主，做好防晒，车里备水；如果清晨在溪边停留久，再加一件薄外套就够。</span></div>
+            <div class="point"><strong>当天提醒</strong><span>最后一天不要贪多，挑一个最顺路的点慢慢看就够。尽量在傍晚前回到杭州，返程体感会轻松很多。</span></div>
           </div>
         </article>
       </div>
+      <p class="small">天气口径：以上温度和降雨概率来自 Open-Meteo，对应开化、龙游、桐庐坐标，查询时间为 2026-04-25。山里天气变化快，出发前请再看一眼最新预报。</p>
     </div>
   </section>
 
@@ -264,19 +280,18 @@
       <div class="card">
         <h2>住宿建议</h2>
         <ul class="clean">
-          <li>开化 4 晚：县城酒店或马金溪附近民宿，方便前 4 天往返。</li>
-          <li>龙游 1 晚：县城酒店，第二天去石窟最省心。</li>
-          <li>桐庐 / 富春江边 1 晚：适合 D6 晚上休整。</li>
-          <li>芦茨 1 晚：适合 D7 慢下来，看溪谷和夜景。</li>
+          <li>开化 4 晚，住县城或马金溪附近，前四天来回最省心。</li>
+          <li>龙游 1 晚，住县城酒店，第二天去石窟最顺手。</li>
+          <li>桐庐 / 富春江边 1 晚，适合 D6 晚上补休息。</li>
+          <li>芦茨 1 晚，适合 D7 真正慢下来，看溪谷和夜里安静感。</li>
         </ul>
       </div>
       <div class="card">
-        <h2>一句话建议</h2>
-        <p class="lead">真正要取舍时，记住三句话就够了。</p>
+        <h2>一句话记住就够了</h2>
         <ul class="clean">
-          <li>安全第一，雨后山路别赶夜路。</li>
-          <li>家里人累了，就减点，不要把“都到了”当成必须全看。</li>
-          <li>这条线的精华是“慢”，不是“多”。</li>
+          <li>晴天优先给 D3、D4，雨天优先给 D5、D6。</li>
+          <li>家里人累了就减点，这条线的精华本来就是慢慢看。</li>
+          <li>山路、村道、返程三件事里，永远先选“安全”和“轻松”。</li>
         </ul>
       </div>
     </div>
@@ -284,19 +299,19 @@
 
   <section id="tips">
     <div class="wrap">
-      <h2>天气和临场调整</h2>
+      <h2>临场提醒</h2>
       <div class="tips">
         <div class="card tip">
-          <h3>下雨怎么办</h3>
-          <p>优先把龙游石窟、古村慢逛放到雨天。钱江源、高田坑、台回山这些更吃天气，留给晴天。</p>
+          <h3>如果下雨</h3>
+          <p>优先压缩高田坑、台回山和钱江源步道，把龙游石窟、县城慢逛、古村喝茶留出来，体验不会差太多。</p>
         </div>
         <div class="card tip">
           <h3>如果想走得轻松一点</h3>
-          <p>钱江源不要走太满，高田坑和台回山只留最顺的一段，古村就选 1 到 2 个代表点慢慢看。</p>
+          <p>开化段每天只留一个核心点，桐庐段古村最多挑两个。宁可少一点，也别在假期里一直赶路。</p>
         </div>
         <div class="card tip">
           <h3>如果开车累了</h3>
-          <p>D5 的转场日只做转场，不加别的景点。回杭州那天也不要把返程拖太晚。</p>
+          <p>D5 只做转场，D8 提前回杭，不把最后两天塞满。这样整趟体验会更稳，也更适合转给家里人参考。</p>
         </div>
       </div>
     </div>
@@ -310,14 +325,15 @@
   <script>
     const stops = [
       { name: '杭州', day: 'D1 出发 / D8 返回', desc: '从杭州出发，最后回杭州。', coords: [30.2741, 120.1551] },
-      { name: '开化县城', day: 'D1-D4 基地', desc: '前 4 天住宿基地，去霞山、钱江源都方便。', coords: [29.1369, 118.4141] },
-      { name: '霞山古村', day: 'D2', desc: '白墙黛瓦古村，适合慢慢走。', coords: [29.2446, 118.3095] },
+      { name: '开化县城', day: 'D1', desc: '第一天落脚点，适合先休息。', coords: [29.1369, 118.4141] },
+      { name: '霞山古村', day: 'D2', desc: '古村慢游，别赶得太满。', coords: [29.2446, 118.3095] },
       { name: '钱江源国家公园', day: 'D3', desc: '山水和森林最强的一天。', coords: [29.2558, 118.1768] },
-      { name: '高田坑村', day: 'D4', desc: '更小众，适合拍照。', coords: [29.2614, 118.3135] },
-      { name: '龙游石窟', day: 'D6 上午', desc: '雨天也能看，洞内偏凉。', coords: [29.0358, 119.1811] },
+      { name: '高田坑村', day: 'D4', desc: '长虹乡一带更小众的乡村线。', coords: [29.2614, 118.3135] },
+      { name: '龙游县城', day: 'D5', desc: '转场入住，留体力给后半程。', coords: [29.0338, 119.1725] },
+      { name: '龙游石窟', day: 'D6 上午', desc: '洞内偏凉，雨天也稳。', coords: [29.0358, 119.1811] },
       { name: '桐庐县城', day: 'D6 住宿', desc: '富春江段的中转基地。', coords: [29.7938, 119.6850] },
-      { name: '深澳古村', day: 'D7', desc: '古村群代表点之一。', coords: [29.8434, 119.6747] },
-      { name: '芦茨村', day: 'D7 住宿', desc: '富春江边休息最舒服。', coords: [29.8646, 119.6869] },
+      { name: '深澳古村', day: 'D7', desc: '富春江古村群代表点。', coords: [29.8434, 119.6747] },
+      { name: '芦茨村', day: 'D7 住宿', desc: '溪边休息最舒服。', coords: [29.8646, 119.6869] },
       { name: '石舍村', day: 'D8', desc: '返程前慢慢逛的最后一站。', coords: [29.9029, 119.6116] }
     ];
 
