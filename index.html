@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>五一浙西行程 · 适合直接发给家里人的正式版</title>
-  <meta name="description" content="杭州—开化—龙游—桐庐 7天6夜自驾行程，逐日真实照片、真实地图、天气、穿戴建议和提醒都放在一页里。" />
+  <meta name="description" content="杭州—开化—龙游—桐庐 8天7夜自驾行程，逐日真实照片、真实地图、天气、穿戴建议和提醒都放在一页里。" />
   <link rel="preconnect" href="https://unpkg.com" />
   <link rel="preconnect" href="https://tile.openstreetmap.org" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
@@ -24,9 +24,6 @@
     .badge{display:inline-block;margin-bottom:14px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);font-size:14px}
     .hero h1{margin:0 0 10px;font-size:clamp(34px,7vw,60px);line-height:1.08}
     .hero p{margin:0;max-width:780px;font-size:18px;opacity:.96}
-    .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:22px;max-width:360px}
-    .stat{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:14px 12px;text-align:center}
-    .stat strong{display:block;font-size:28px;line-height:1.08;margin-bottom:4px}
     .nav{position:sticky;top:0;z-index:100;background:rgba(245,242,235,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
     .navin{display:flex;gap:10px;overflow:auto;padding:10px 18px;white-space:nowrap}
     .nav a{padding:10px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--text);font-size:15px}
@@ -65,8 +62,6 @@
     .point:last-child{border-bottom:none}
     .point strong{display:block;font-size:16px;margin-bottom:3px}
     .point span{display:block;font-size:15px;color:var(--muted)}
-    .tips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-    .tip h3{margin:0 0 8px;font-size:20px}
     ul.clean{margin:8px 0 0 18px;padding:0}
     ul.clean li{margin:6px 0;font-size:15px}
     .small{font-size:14px;color:var(--muted)}
@@ -79,7 +74,6 @@
     }
     @media (max-width:520px){
       .hero{padding:36px 0 24px}
-      .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
       .card{padding:16px}
       .day{border-radius:16px}
       .day-body{padding:14px 16px 16px}
@@ -97,12 +91,8 @@
   <header class="hero">
     <div class="wrap">
       <div class="badge">2026 五一假期 · 逐日清楚版</div>
-      <h1>五一浙西行程</h1>
+      <h1>五一浙西行程 · 8天7晚</h1>
       <p>杭州出发，先住开化，再转龙游和桐庐。这个版本适合直接发给家里人打开，每一天都放了对应实景图，也把天气、穿什么、当天提醒一起写进去了。</p>
-      <div class="stats">
-        <div class="stat"><strong>7</strong><span>天</span></div>
-        <div class="stat"><strong>6</strong><span>晚</span></div>
-      </div>
     </div>
   </header>
 
@@ -110,8 +100,6 @@
     <div class="wrap navin">
       <a href="#days">每日安排</a>
       <a href="#photos">逐日实景</a>
-      <a href="#stay">住宿</a>
-      <a href="#tips">临场提醒</a>
       <a href="#mapsec">真实路线地图</a>
     </div>
   </nav>
@@ -230,46 +218,6 @@
     </div>
   </section>
 
-  <section id="stay">
-    <div class="wrap grid2">
-      <div class="card">
-        <h2>住宿建议</h2>
-        <ul class="clean">
-          <li>开化 4 晚，住县城或马金溪附近，前四天来回最省心。</li>
-          <li>龙游 1 晚，住县城酒店，第二天去石窟最顺手。</li>
-          <li>桐庐 / 富春江边 2 晚，适合 D6 到达后休整，以及 D7 古村线慢慢走。</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h2>一句话记住就够了</h2>
-        <ul class="clean">
-          <li>晴天优先给 D3、D4，雨天优先给 D6 的石窟段。</li>
-          <li>家里人累了就减点，这条线的精华本来就是慢慢看。</li>
-          <li>山路、村道、返程三件事里，永远先选“安全”和“轻松”。</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section id="tips">
-    <div class="wrap">
-      <h2>临场提醒</h2>
-      <div class="tips">
-        <div class="card tip">
-          <h3>如果下雨</h3>
-          <p>优先压缩高田坑、台回山和钱江源步道，把龙游石窟、县城慢逛、古村喝茶留出来，体验不会差太多。</p>
-        </div>
-        <div class="card tip">
-          <h3>如果想走得轻松一点</h3>
-          <p>开化段每天只留一个核心点，桐庐段古村最多挑两个。宁可少一点，也别在假期里一直赶路。</p>
-        </div>
-        <div class="card tip">
-          <h3>如果开车累了</h3>
-          <p>D5 先稳稳转到龙游，D6 再看石窟去桐庐，D8 上午去富春江后回杭，整个后半程会更顺。</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <section id="mapsec">
     <div class="wrap">
