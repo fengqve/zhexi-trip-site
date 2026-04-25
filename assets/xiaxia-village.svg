@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+<defs><linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#bfe5ff"/><stop offset="100%" stop-color="#eef8ff"/></linearGradient><linearGradient id="hill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#7dbb7b"/><stop offset="100%" stop-color="#446b3c"/></linearGradient></defs>
+<rect width="1600" height="900" fill="url(#sky)"/>
+<path d="M0 420 C180 360 310 340 520 390 C760 445 940 330 1150 360 C1340 390 1470 360 1600 320 L1600 900 L0 900 Z" fill="#95c98a"/>
+<path d="M0 510 C210 450 430 500 610 460 C850 410 1090 470 1280 430 C1430 398 1535 410 1600 390 L1600 900 L0 900 Z" fill="url(#hill)" opacity=".88"/>
+<rect x="140" y="410" width="220" height="180" fill="#f9f7f0" stroke="#cfcac1" stroke-width="6"/>
+<polygon points="120,420 250,330 380,420" fill="#2f2f2f"/>
+<rect x="450" y="390" width="260" height="205" fill="#fbfaf4" stroke="#cfcac1" stroke-width="6"/>
+<polygon points="420,400 580,300 740,400" fill="#353535"/>
+<rect x="805" y="430" width="210" height="160" fill="#f8f6ef" stroke="#cfcac1" stroke-width="6"/>
+<polygon points="780,438 910,350 1040,438" fill="#303030"/>
+<rect x="1080" y="400" width="280" height="190" fill="#fbfaf5" stroke="#cfcac1" stroke-width="6"/>
+<polygon points="1050,410 1220,310 1390,410" fill="#2b2b2b"/>
+<path d="M0 680 C250 640 430 710 650 690 C880 668 1010 615 1210 646 C1360 670 1490 720 1600 700 L1600 900 L0 900 Z" fill="#78b8cf"/>
+<path d="M0 720 C280 690 440 742 620 726 C790 711 960 657 1200 690 C1410 720 1510 760 1600 752" fill="none" stroke="#cdefff" stroke-width="10" opacity=".8"/>
+<circle cx="1320" cy="170" r="52" fill="#fff4c4" opacity=".9"/>
+<text x="96" y="120" fill="#1f4230" font-size="64" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-weight="700">霞山古村</text>
+<text x="96" y="182" fill="#36594a" font-size="30" font-family="PingFang SC, Microsoft YaHei, sans-serif">白墙黛瓦、溪流、窄巷、慢节奏</text>
+</svg>

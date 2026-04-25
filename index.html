@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>五一浙西行程 · 老人也能直接打开的版本</title>
+  <meta name="description" content="杭州—开化—龙游—桐庐 8天7夜自驾行程，带真实照片、真实地图路线、老人友好的大字版说明。" />
+  <link rel="preconnect" href="https://unpkg.com" />
+  <link rel="preconnect" href="https://tile.openstreetmap.org" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <style>
+    :root{
+      --bg:#f6f3ee;--card:#fff;--text:#20302a;--muted:#55635c;--line:#dde3dc;
+      --green:#3f6f37;--green2:#295228;--blue:#2a6c97;--gold:#ca8a13;--soft:#eef5ee;
+      --shadow:0 8px 24px rgba(20,40,30,.08);--radius:18px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.8}
+    a{color:var(--blue);text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+    .hero{padding:52px 0 34px;background:linear-gradient(135deg,#254126 0%,#3f6f37 42%,#2a6c97 100%);color:#fff}
+    .hero h1{margin:0 0 10px;font-size:clamp(34px,7vw,60px);line-height:1.1}
+    .hero p{margin:0;max-width:760px;font-size:18px;opacity:.95}
+    .badge{display:inline-block;margin-bottom:14px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);font-size:14px}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:22px}
+    .stat{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:14px 12px;text-align:center}
+    .stat strong{display:block;font-size:28px;line-height:1.1;margin-bottom:4px}
+    .nav{position:sticky;top:0;z-index:100;background:rgba(246,243,238,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+    .navin{display:flex;gap:10px;overflow:auto;padding:10px 18px;white-space:nowrap}
+    .nav a{padding:10px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--text);font-size:15px}
+    section{padding:26px 0}
+    h2{font-size:28px;line-height:1.3;margin:0 0 8px;color:var(--green2)}
+    .lead{margin:0 0 18px;color:var(--muted);font-size:16px}
+    .grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+    .route-list{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+    .route-stop{background:var(--soft);border-radius:14px;padding:12px;text-align:center}
+    .route-stop strong{display:block;font-size:16px}
+    .route-stop span{font-size:14px;color:var(--muted)}
+    #map{height:520px;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#e8efe9}
+    .map-note{margin-top:10px;font-size:14px;color:var(--muted)}
+    .gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+    .photo{overflow:hidden;padding:0}
+    .photo img{height:240px;width:100%;object-fit:cover}
+    .photo .txt{padding:14px 16px}
+    .photo h3{margin:0 0 6px;font-size:20px}
+    .photo p,.source{margin:0;font-size:15px;color:var(--muted)}
+    .source{margin-top:8px}
+    .days{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .day{padding:0;overflow:hidden}
+    .day-head{padding:16px 18px;background:linear-gradient(90deg,#eef5ee,#f7fbff);border-bottom:1px solid var(--line)}
+    .day-head h3{margin:0 0 4px;font-size:22px}
+    .day-head p{margin:0;color:var(--muted);font-size:15px}
+    .day-body{padding:16px 18px}
+    .point{padding:10px 0;border-bottom:1px dashed #e5e9e4}
+    .point:last-child{border-bottom:none}
+    .point strong{display:block;font-size:17px}
+    .point span{display:block;font-size:15px;color:var(--muted)}
+    .tips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .tip h3{margin:0 0 8px;font-size:20px}
+    ul.clean{margin:8px 0 0 18px;padding:0}
+    ul.clean li{margin:6px 0;font-size:15px}
+    footer{padding:28px 0 44px;color:var(--muted);font-size:14px;text-align:center}
+    .small{font-size:14px;color:var(--muted)}
+    @media (max-width:860px){
+      .grid2,.days,.tips,.gallery{grid-template-columns:1fr}
+      .route-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+      #map{height:420px}
+    }
+    @media (max-width:520px){
+      .hero{padding:36px 0 24px}
+      .hero p,.lead,.photo p,.source,.point span,.small,.day-head p,.nav a{font-size:16px}
+      .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .card{padding:16px}
+      .route-stop strong{font-size:17px}
+      .photo img{height:220px}
+      #map{height:360px}
+      h2{font-size:26px}
+      .day-head h3{font-size:21px}
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="badge">2026 五一假期 · 大字清爽版</div>
+      <h1>五一浙西行程</h1>
+      <p>杭州出发，先住开化，再转龙游和桐庐。这个版本可以直接发给老人打开，页面是正式 HTTPS 静态网页，带真实照片、真实地图路线、每天做什么一眼就能看明白。</p>
+      <div class="stats">
+        <div class="stat"><strong>8</strong><span>天</span></div>
+        <div class="stat"><strong>7</strong><span>晚</span></div>
+        <div class="stat"><strong>10</strong><span>个主停靠点</span></div>
+        <div class="stat"><strong>自驾</strong><span>主线已画在地图上</span></div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav">
+    <div class="wrap navin">
+      <a href="#overview">总览</a>
+      <a href="#mapsec">真实路线地图</a>
+      <a href="#photos">真实照片</a>
+      <a href="#days">每日安排</a>
+      <a href="#stay">住宿</a>
+      <a href="#tips">提醒</a>
+    </div>
+  </nav>
+
+  <section id="overview">
+    <div class="wrap grid2">
+      <div class="card">
+        <h2>路线总览</h2>
+        <p class="lead">整体节奏是“开化深度游 4 天，龙游中转 1 天，桐庐富春江线 3 天”。前半段看古村和山水，后半段放慢节奏看石窟、古村和溪谷。</p>
+        <div class="route-list">
+          <div class="route-stop"><strong>杭州</strong><span>出发</span></div>
+          <div class="route-stop"><strong>开化</strong><span>D1-D4 基地</span></div>
+          <div class="route-stop"><strong>龙游</strong><span>D5 中转</span></div>
+          <div class="route-stop"><strong>桐庐</strong><span>D6-D7 基地</span></div>
+          <div class="route-stop"><strong>杭州</strong><span>D8 返回</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>适合老人看的要点</h2>
+        <ul class="clean">
+          <li>地图里每个点都能点开，看名字和当天安排。</li>
+          <li>蓝线不是示意线，而是按真实道路服务拉出的驾车路线。</li>
+          <li>照片已经换成真实实景，不再是示意插画。</li>
+          <li>字做大了，手机上不用放大也能看。</li>
+          <li>如果下雨，优先把龙游石窟、古村慢逛放到前面。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="mapsec">
+    <div class="wrap">
+      <div class="card">
+        <h2>真实路线地图</h2>
+        <p class="lead">下面这张地图会把整趟自驾主线和主要落脚点连起来。点任意圆点，可以看当天看什么、住哪里，还能直接跳到高德地图导航。</p>
+        <div id="map"></div>
+        <p class="map-note">说明：路线由公开 OSRM 驾车路线服务动态生成，底图来自 OpenStreetMap。首次打开可能需要 1 到 2 秒加载。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="photos">
+    <div class="wrap">
+      <h2>真实照片</h2>
+      <p class="lead">这里放的是实景照片，不再是示意图。为了稳定打开，照片已随站点一起部署。</p>
+      <div class="gallery">
+        <article class="card photo">
+          <img src="assets/photos/kaihua-yanglin.jpg" alt="开化杨林一带实景照片" />
+          <div class="txt">
+            <h3>开化古村方向实景</h3>
+            <p>对应 D1-D4 的开化段，先看浙西乡村的整体气质，和霞山古村、高田坑这条线的感觉接近。</p>
+            <p class="source">来源：Wikimedia Commons, 201901 Yanglin, Kaihua.jpg</p>
+          </div>
+        </article>
+        <article class="card photo">
+          <img src="assets/photos/qianjiangyuan.jpg" alt="钱江源国家森林公园实景照片" />
+          <div class="txt">
+            <h3>钱江源国家公园实景</h3>
+            <p>对应 D3 的钱江源 / 齐溪一线，是这趟最像“真正进山”的一天。</p>
+            <p class="source">来源：Wikimedia Commons, Kaihua Qianjiangyuan Guojia Senlin Gongyuan 2018.07.20 07-28-19.jpg</p>
+          </div>
+        </article>
+        <article class="card photo">
+          <img src="assets/photos/longyou-grottoes.jpg" alt="龙游石窟实景照片" />
+          <div class="txt">
+            <h3>龙游石窟实景</h3>
+            <p>对应 D5 的龙游中转日，适合雨天，也适合体力想省一点的时候看。</p>
+            <p class="source">来源：Wikimedia Commons, Longyou Grottoes Banner.jpg</p>
+          </div>
+        </article>
+        <article class="card photo">
+          <img src="assets/photos/fuchun-river.jpg" alt="富春江桐庐段实景照片" />
+          <div class="txt">
+            <h3>富春江 / 桐庐实景</h3>
+            <p>对应 D6-D8 的桐庐收尾段，深澳、环溪、芦茨和石舍都在这一片慢慢玩。</p>
+            <p class="source">来源：Wikimedia Commons, Fuchun River.jpg</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="days">
+    <div class="wrap">
+      <h2>每天怎么走</h2>
+      <p class="lead">下面把原来的中文行程保留下来，改成更容易扫读的卡片。</p>
+      <div class="days">
+        <article class="card day">
+          <div class="day-head"><h3>D1 · 4月30日 杭州 → 开化</h3><p>到达日，节奏最轻，早点入住休息。</p></div>
+          <div class="day-body">
+            <div class="point"><strong>主线</strong><span>杭州出发，约 3.5 小时到开化，入住县城或马金溪附近。</span></div>
+            <div class="point"><strong>适合安排</strong><span>酒店休息、县城吃饭、顺路熟悉第二天出发方向。</span></div>
+            <div class="point"><strong>住宿</strong><span>开化县城住 1 晚。</span></div>
+          </div>
+        </article>
+        <article class="card day">
+          <div class="day-head"><h3>D2 · 5月1日 霞山古村 + 马金溪</h3><p>人文慢游日，老人最容易接受。</p></div>
+          <div class="day-body">
+            <div class="point"><strong>主线</strong><span>上午看霞山古村，下午在马金溪周边慢逛。</span></div>
+            <div class="point"><strong>备选</strong><span>如果人多，就把节奏改成古村拍照 + 县城喝茶，不硬赶点。</span></div>
+            <div class="point"><strong>强度</strong><span>中等偏轻，适合假期第一整天。</span></div>
+          </div>
+        </article>
+        <article class="card day">
+          <div class="day-head"><h3>D3 · 5月2日 钱江源 / 齐溪</h3><p>整趟最像进山的一天。</p></div>
+          <div class="day-body">
+            <div class="point"><strong>主线</strong><span>去钱江源国家公园和齐溪一线看森林、溪谷和源头景观。</span></div>
+            <div class="point"><strong>雨天替代</strong><span>如果下雨，就压缩山里段，提前回县城或把龙游石窟提到前面。</span></div>
+            <div class="point"><strong>强度</strong><span>中等偏高，要穿防滑鞋和薄外套。</span></div>
+          </div>
+        </article>
+        <article class="card day">
+          <div class="day-head"><h3>D4 · 5月3日 高田坑 + 台回山</h3><p>最小众、也最出片的一天。</p></div>
+          <div class="day-body">
+            <div class="point"><strong>主线</strong><span>看高田坑古村、台回山和周边村道风景。</span></div>
+            <div class="point"><strong>提醒</strong><span>如果前几天下过雨，尽量白天走，不要安排夜路。</span></div>
+            <div class="point"><strong>强度</strong><span>偏高，但照片通常最好看。</span></div>
+          </div>
+        </article>
+        <article class="card day">
+          <div class="day-head"><h3>D5 · 5月4日 开化 → 衢州 → 龙游</h3><p>转场日，不要贪多。</p></div>
+          <div class="day-body">
+            <div class="point"><strong>主线</strong><span>从开化离开，经衢州方向转到龙游。</span></div>
+            <div class="point"><strong>怎么安排最稳</strong><span>路上以休息、吃饭、办理入住为主，给后面两天留体力。</span></div>
+            <div class="point"><strong>住宿</strong><span>龙游住 1 晚。</span></div>
+          </div>
+        </article>
+        <article class="card day">
+          <div class="day-head"><h3>D6 · 5月5日 龙游石窟 → 桐庐</h3><p>先看石窟，再去桐庐。</p></div>
+          <div class="day-body">
+            <div class="point"><strong>主线</strong><span>上午龙游石窟，下午出发去桐庐。</span></div>
+            <div class="point"><strong>提醒</strong><span>石窟里偏凉，带件外套。1.5 到 2 小时基本够看。</span></div>
+            <div class="point"><strong>住宿</strong><span>桐庐县城或富春江边住 1 晚。</span></div>
+          </div>
+        </article>
+        <article class="card day">
+          <div class="day-head"><h3>D7 · 5月6日 深澳 · 荻浦 · 环溪 · 芦茨</h3><p>开始进入富春江慢生活段。</p></div>
+          <div class="day-body">
+            <div class="point"><strong>主线</strong><span>挑 2 到 3 个古村看，不要四个都深逛，最后到芦茨休息。</span></div>
+            <div class="point"><strong>适合老人</strong><span>这天可以慢慢走、多坐坐，喝茶看水，不拼步数。</span></div>
+            <div class="point"><strong>住宿</strong><span>芦茨住 1 晚最舒服。</span></div>
+          </div>
+        </article>
+        <article class="card day">
+          <div class="day-head"><h3>D8 · 5月7日 石舍 · 茆坪 · 芦茨溪谷 → 杭州</h3><p>收尾返程日，玩到舒服就回。</p></div>
+          <div class="day-body">
+            <div class="point"><strong>主线</strong><span>上午看石舍或茆坪，下午沿芦茨溪谷收尾后回杭州。</span></div>
+            <div class="point"><strong>提醒</strong><span>最后一天不建议塞太满，保证回程轻松。</span></div>
+            <div class="point"><strong>返程</strong><span>傍晚前回到杭州最好。</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="stay">
+    <div class="wrap grid2">
+      <div class="card">
+        <h2>住宿建议</h2>
+        <ul class="clean">
+          <li>开化 4 晚：县城酒店或马金溪附近民宿，方便前 4 天往返。</li>
+          <li>龙游 1 晚：县城酒店，第二天去石窟最省心。</li>
+          <li>桐庐 / 富春江边 1 晚：适合 D6 晚上休整。</li>
+          <li>芦茨 1 晚：适合 D7 慢下来，看溪谷和夜景。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>一句话建议</h2>
+        <p class="lead">真正要取舍时，记住三句话就够了。</p>
+        <ul class="clean">
+          <li>安全第一，雨后山路别赶夜路。</li>
+          <li>老人累了，就减点，不要把“都到了”当成必须全看。</li>
+          <li>这条线的精华是“慢”，不是“多”。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="tips">
+    <div class="wrap">
+      <h2>天气和临场调整</h2>
+      <div class="tips">
+        <div class="card tip">
+          <h3>下雨怎么办</h3>
+          <p>优先把龙游石窟、古村慢逛放到雨天。钱江源、高田坑、台回山这些更吃天气，留给晴天。</p>
+        </div>
+        <div class="card tip">
+          <h3>如果带老人</h3>
+          <p>钱江源不要走太满，高田坑和台回山只留最顺的一段，古村就选 1 到 2 个代表点慢慢看。</p>
+        </div>
+        <div class="card tip">
+          <h3>如果开车累了</h3>
+          <p>D5 的转场日只做转场，不加别的景点。回杭州那天也不要把返程拖太晚。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    五一浙西 8 日行程 · 正式静态网页版 · 适合直接转发给家里人打开
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+    const stops = [
+      { name: '杭州', day: 'D1 出发 / D8 返回', desc: '从杭州出发，最后回杭州。', coords: [30.2741, 120.1551] },
+      { name: '开化县城', day: 'D1-D4 基地', desc: '前 4 天住宿基地，去霞山、钱江源都方便。', coords: [29.1369, 118.4141] },
+      { name: '霞山古村', day: 'D2', desc: '白墙黛瓦古村，适合慢慢走。', coords: [29.2446, 118.3095] },
+      { name: '钱江源国家公园', day: 'D3', desc: '山水和森林最强的一天。', coords: [29.2558, 118.1768] },
+      { name: '高田坑村', day: 'D4', desc: '更小众，适合拍照。', coords: [29.2614, 118.3135] },
+      { name: '龙游石窟', day: 'D6 上午', desc: '雨天也能看，洞内偏凉。', coords: [29.0358, 119.1811] },
+      { name: '桐庐县城', day: 'D6 住宿', desc: '富春江段的中转基地。', coords: [29.7938, 119.6850] },
+      { name: '深澳古村', day: 'D7', desc: '古村群代表点之一。', coords: [29.8434, 119.6747] },
+      { name: '芦茨村', day: 'D7 住宿', desc: '富春江边休息最舒服。', coords: [29.8646, 119.6869] },
+      { name: '石舍村', day: 'D8', desc: '返程前慢慢逛的最后一站。', coords: [29.9029, 119.6116] }
+    ];
+
+    const map = L.map('map', { scrollWheelZoom: false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const latlngs = [];
+    const bounds = [];
+
+    stops.forEach((stop, idx) => {
+      const amap = `https://uri.amap.com/marker?position=${stop.coords[1]},${stop.coords[0]}&name=${encodeURIComponent(stop.name)}`;
+      const marker = L.circleMarker(stop.coords, {
+        radius: idx === 0 || idx === stops.length - 1 ? 8 : 7,
+        color: idx === 0 || idx === stops.length - 1 ? '#ca8a13' : '#2a6c97',
+        weight: 2,
+        fillColor: idx === 0 || idx === stops.length - 1 ? '#f0b432' : '#2a6c97',
+        fillOpacity: .92
+      }).addTo(map);
+      marker.bindPopup(`<strong>${stop.name}</strong><br>${stop.day}<br>${stop.desc}<br><a href="${amap}" target="_blank" rel="noopener">打开高德定位</a>`);
+      latlngs.push(`${stop.coords[1]},${stop.coords[0]}`);
+      bounds.push(stop.coords);
+    });
+
+    map.fitBounds(bounds, { padding: [28, 28] });
+
+    fetch(`https://router.project-osrm.org/route/v1/driving/${latlngs.join(';')}?overview=full&geometries=geojson`)
+      .then(r => r.json())
+      .then(data => {
+        if (!data.routes || !data.routes[0]) throw new Error('no-route');
+        const coords = data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+        L.polyline(coords, { color: '#1f6fb0', weight: 5, opacity: .85 }).addTo(map);
+      })
+      .catch(() => {
+        L.polyline(stops.map(s => s.coords), { color: '#1f6fb0', weight: 4, opacity: .7, dashArray: '8 6' }).addTo(map);
+      });
+  </script>
+</body>
+</html>
